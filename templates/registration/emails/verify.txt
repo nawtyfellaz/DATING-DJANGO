@@ -1,0 +1,18 @@
+{% load i18n %}
+{% blocktrans %}
+Hello, 
+
+Please activate your account for {{ email }} by clicking the link below:
+
+Once you activate, you can login!
+
+Thank you,
+
+Python eCommerce
+
+{% endblocktrans %}
+
+
+{{ protocol }}://{{ path }}
+
+

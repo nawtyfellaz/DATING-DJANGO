@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+
+
+{% block content %}
+
+
+<h3>{{ profile.user }}</h3>
+<p class='lead'>Match: {{ match.get_percent }} </p>
+
+<div class='col-sm-2'>
+{% if profile.picture %}
+<img src='{{ profile.picture.url }}' class='img-responsive'/>
+{% else %}
+
+<img src='{% static "img/profile_default.jpg" %}' class='img-responsive' />
+
+{% endif %}
+</div>
+
+
+
+<a href="{{ profile.like_link }}" />{% if do_i_like %}Unlike{% else %}Like{% endif %}</a>
+
+
+{% if mutual_like %}
+<p class='lead'>
+You are connected! 
+</p>
+<p>
+Email: {{ profile.user.email }}
+</p>
+
+{% endif %}
+
+{% if jobs %} 
+<div class='row'>
+<ul>
+{% for job in jobs %}
+
+<li>{{ job.position }} in {{ job.location }} at {{ job.employer_name }}</li>
+{% endfor %}
+
+</ul>
+
+
+</div>
+
+{% endif %}
+
+{% endblock %}

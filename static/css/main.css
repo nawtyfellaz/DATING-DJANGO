@@ -1,0 +1,234 @@
+@import url(
+    'https://fonts.googleapis.com/css?family=Lobster|Raleway|Righteous|Ubuntu'
+    );
+
+html {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+}
+*, *:before, *:after {
+    -webkit-box-sizing: inherit;
+    -moz-box-sizing: inherit;
+    box-sizing: inherit;
+}
+
+.header-font {
+    font-family: 'Righteous', cursive;
+    font-weight: 800;
+}
+.italizeed-font {
+    font-family: 'Lobster', cursive;
+    font-weight: 400;
+}
+body {
+    max-width: 100% !important;
+    min-height: 100% !important;
+    font-family: 'Raleway', 'Ubuntu', sans-serif !important;
+    font-weight: 200 !important;
+    background-color: #FFF !important;
+    margin: 0 !important;
+}
+.container-fluid {
+    padding-left: 2em !important;
+    padding-right: 2em !important;
+    max-width: 100% !important;
+    bottom: 0;
+    top: 0;
+}
+.brand-logo {
+    color: #ffffff !important;
+    font-weight: 600 !important;
+    font-family: 'Lobster', cursive;
+}
+.nav-link li a{
+    color: #ffffff !important;
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+}
+.sidenav {
+    position: absolute;
+    top: 64.5px;
+    height: calc(100% - 64.5px) !important;
+    text-transform: uppercase !important;
+}
+.dropdown-content {
+    position: relative !important;
+    top: 0 !important;
+}
+.dropdown-content li a {
+    color: #FFF !important;
+    text-align: right !important;
+    background-color: rgb(27, 36, 34) !important;
+}
+.active a:hover{
+    color: #ffffff !important;
+}
+
+
+/*=============================================
+=            registration and login            =
+=============================================*/
+.title {
+    top: 4em;
+    position: relative;
+}
+.card {
+    position: relative !important;
+    top: 6em;
+    z-index: 2;
+}
+.card .card-content h6 {
+    font-weight: 900 !important;
+    font-family: 'Righteous' !important;
+    letter-spacing: 2px;
+}
+em {
+    font-weight: 600 !important;
+}
+/*=====  End of registration and login  ======*/
+
+
+
+/*=============================================
+=            Home Section design            =
+=============================================*/
+.hero {
+    width: 100% !important;
+    height: 640px !important;
+    position: relative;
+    object-fit: cover !important;
+    object-position: center !important;
+}
+.hero img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover !important;
+    object-position: center !important;
+
+}
+.hero-contact {
+    width: 100% !important;
+    height: 120px !important;
+    object-fit: cover !important;
+    object-position: top !important;
+    position: relative !important;
+}
+.hero-contact img {
+    width: 100% !important;
+    object-fit: cover !important;
+    object-position: top !important;
+}
+.hero .captions {
+    max-width: 50%;
+    min-height: 480px;
+    padding: 2em;
+    margin-bottom: 4em;
+    position: absolute;
+    z-index: 2;
+    top: calc(45.7px + 2em);
+    right: 4em;
+    background-color: rgba(255, 255, 255, 0.589);
+}
+.hero .captions p {
+    font-weight: 400;
+}
+.btc-rates {
+    overflow-x: auto !important;
+    flex-wrap: nowrap !important;
+    display: flex !important;
+    -webkit-overflow-scrolling: touch !important;
+    background-color: rgb(111, 111, 111);
+    padding-left: 1.5em;
+    padding-right: 1.5em;
+}
+.btc-rates .btcwdgt-price,
+.btc-rates .btcwdgt-pool {
+    flex: 0 0 auto !important;
+    width: 930px !important;
+    min-height: 70px !important;
+    margin-right: 2em !important;
+}
+.btc-rates .btcwdgt-price:first-child {
+    margin-left: 5em;
+}
+
+/*=====  End of Home Section design  ======*/
+
+
+
+
+
+
+
+
+
+
+/*=============================================
+=            mobile screen media queries            =
+=============================================*/
+
+@media screen and (max-device-width:420px) and (max-device-height:825px) and (-webkit-min-device-pixel-ratio: 2) {
+    .container-fluid {
+        padding-left: 1em !important;
+        padding-right: 1em !important;
+        max-width: 100% !important;
+        bottom: 0;
+        top: 0;
+    }
+    .sidenav {
+        position: absolute;
+        top: 55.5px;
+        height: calc(100% - 55px) !important;
+        width: 190px !important;
+    }
+    .hero .captions {
+        max-width: 80%;
+        min-height: 480px;
+        padding: 2em;
+        bottom: 2em;
+        position: absolute;
+        z-index: 2;
+        top: calc(25.7px + 2em);
+        right: 10%;
+        background-color: rgba(255, 255, 255, 0.7);
+    }
+    .hero .captions h3 {
+        font-weight: 400;
+        font-size: 21px;
+        margin-top: 1.2em;
+    }
+    .hero .captions p {
+        font-size: 13px;
+    }
+    .btc-rates {
+        overflow-x: auto !important;
+        flex-wrap: nowrap !important;
+        display: flex !important;
+        -webkit-overflow-scrolling: touch !important;
+        background-color: rgb(111, 111, 111);
+        padding-left: 1.5em !important;
+        padding-right: 1.5em !important;
+    }
+    .btc-rates .btcwdgt-price {
+        flex: 0 0 auto !important;
+        width: 930px !important;
+        min-height: 70px !important;
+        margin-left: 1em !important;
+    }
+    
+}
+@media screen and (max-device-width:320px) and (max-device-height:570px) and (-webkit-min-device-pixel-ratio: 2) {
+    .hero .captions h3 {
+        font-weight: 400;
+        font-size: 19px;
+        margin-top: 1.5em;
+    }
+    .hero .captions p {
+        font-size: 11px;
+    }
+}
+
+/*=====  End of mobile screen media queries  ======*/

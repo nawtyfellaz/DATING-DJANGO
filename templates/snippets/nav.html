@@ -1,0 +1,45 @@
+{% url 'login' as login_url %}
+{% url 'logout' as logout_url %}
+{% url 'register' as register_url %}
+
+{% url 'home' as index_url %}
+{% url 'contact' as contact_url %}
+{% url 'email-success' as success_url %}
+{% url 'account:home' as account_url %}
+{% url 'password_change' as password_change_url %}
+
+
+<div class="navbar-fixed">
+    <nav class="blue-grey darken-4" role="navigation">
+        <div class="nav-wrapper container-fluid">
+            <a href="#" data-target="nav-mobile" class="left show-on-large sidenav-icon sidenav-trigger"><i class="material-icons white-text">menu</i></a>
+            <a id="logo-container" href="{% url 'home' %}" class="brand-logo center">Dating</a>
+            <ul class="right nav-link white-text">
+                <li><a href="#!" class="dropdown-trigger" data-target="settings"><i class="material-icons right white-text">account_circle</i><em class="hide-on-small-only">{{user.short_name}}</em></a></li>        
+            </ul>
+        </div>
+    </nav>    
+</div>
+<ul id="nav-mobile" class="blue-grey darken-2 sidenav">
+    <form style="position:relative;margin-top:-1em;margin-bottom:2em;">
+        <div class="input-field">
+            <input id="search" type="search" required>
+            <label style="padding-top:6px;" class="label-icon" for="search"><i class="material-icons">search</i></label>
+            <i style="padding-top:6px;" class="material-icons">close</i>
+        </div>
+    </form>
+    <li class="{% if request.path == index_url %}active{% endif %}"><a href="{{index_url}}" class="white-text">HOME</a></li>
+    <li class="{% if request.path == contact_url %}active{% elif request.path == success_url %}active{% endif %}"><a href="{{contact_url}}" class="white-text">CONTACT</a></li>
+    
+</ul>
+<ul id="settings" class="dropdown-content">
+    {% if not user.is_authenticated %}
+    <li class="{% if request.path == login_url %}active{% endif %} right-align"><a href="{{login_url}}" class=" blue-grey-text">login</a></li>
+    <li class="{% if request.path == register_url %}active{% endif %} right-align"><a href="{{register_url}}" class="blue-grey-text">register</a></li>
+    {% else %}
+    <li class="{% if request.path == account_url %}active{% endif %} right-align"><a href="{{account_url}}" class=" blue-grey-text">Profile</a></li>
+    <li class="{% if request.path == password_change_url %}active{% endif %} right-align"><a href="{{password_change_url}}" class=" blue-grey-text">settings</a></li>
+    <li class="divider"></li>
+    <li class="{% if request.path == logout_url %}active{% endif %} right-align"><a href="{{logout_url}}" class="blue-grey-text">logout</a></li>
+    {% endif %}
+</ul>

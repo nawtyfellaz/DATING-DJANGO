@@ -1,0 +1,1 @@
+echo "web: gunicorn dating.wsgi --log-file -" > Procfile

@@ -1,0 +1,229 @@
+### TO LOGIN TO HEROKU ###
+    heroku login
+
+### CREATE HEROKU APP ###
+    heroku create <app_name>
+
+### HEROKU GIT INITIALIZING FOR DEPLOY ###
+    git init
+    git status
+    git add .
+    git commit -m "commit texts"
+    git push heroku master
+
+### HEROKU SETUP BEFORE DEPLOYMENT ###
+    heroku config:set DEBUG_COLLECTSTATIC=1
+    heroku config:set DISABLE_COLLECTSTATIC=1
+    heroku buildpacks:add heroku/python
+
+    heroku ps:scale web=1    #scale to create a web dyno else site wont work (1 or 0)
+
+### HEROKU WEBSITE OPEN SHORTCUT ###
+    heroku open
+
+### HEROKU WEBSITE VIEW LOGS ###
+    heroku logs --tail
+
+### HEROKU CHECK DYNOS ###
+    heroku ps
+
+### HEROKU CHECK PIP DEPENDENCIES ###
+    pip list
+
+### RUN HEROKU LOCALY ###
+    heroku local web -f Procfile.windows        (windows command line)
+    heroku local web                            (unix or linux command line)
+
+### RUN DJANGO COMMANDS ON HEROKU ###
+    heroku run
+    heroku restart  (TO BE DONE AFTER A DJANGO MIGRATE COMMAND)
+
+### HEROKU SET CONFIGURATION ###
+    heroku config:set <VARIABLE_NAME_IN_CAPS>=<VARIABLE_VALUE>
+
+### CHECK DABASE INFORMATION AT HEROKU ###
+    heroku pg
+
+### GET MEMCACHE TO USE FOR DATABASE ###
+    heroku addons:create memcachier:dev
+
+
+
+
+HOW TO ACCESS THE HEROKU DATABASE
+_________________________________
+
+if your app was deployed to https://wonderful-app-287.herokuapp.com/ 
+then visit https://wonderful-app-287.herokuapp.com/db.
+
+Accessing it will yield an error though, because while the database 
+is configured, the tables have not been created. Run the standard 
+Django 'manage.py migrate' to create the tables.
+
+
+
+MODEL FIELDS FOR USER INFORMATION
+_________________________________
+
+    SEX = (
+        (0, 'SEX'),
+        (1, 'MALE'),
+        (2, 'FEMALE'),
+    )
+    MARITAL = (
+        (0, 'SINGLE'),
+        (1, 'MARRIED'),
+        (2, 'DIVORCED'),
+        (3, 'SEPERATED'),
+    )
+    sex             = models.CharField(max_length=7, blank=False, null=True, choices=SEX, default=0 )
+    marital         = models.CharField(max_length=18, blank=False, null=True, choices=MARITAL)
+    next_of_kin     = models.CharField(max_length=255, blank=False, null=True,)
+    DOB             = models.DateField(max_length=8)
+    phone           = PhoneNumberField(blank=False, help_text='Contact phone number')#, E164_only=True
+    fax             = PhoneNumberField(blank=True, help_text='Contact phone number')
+    address         = models.CharField(max_length=300, blank=False, null=True)
+    zip_code        = USZipCodeField(null=True, blank=True)
+    state_province  = USStateField(null=True, blank=False)
+    SSN             = USSocialSecurityNumberField(null=True, blank=False)
+    country         = models.CharField(max_length=300, blank=False, null=True, default='United States of America')
+
+
+FORM FIELDS
+_________________________________
+class UserDetailChangeForm(forms.ModelForm):
+    # company_name = forms.CharField(label='Name', required=False, widget=forms.TextInput(attrs={"class": 'form-control'}))
+    zip_code = USZipCodeField()
+    state_province = USStateField()
+    SSN = USSocialSecurityNumberField()
+    phone = PhoneNumberField()
+    fax = PhoneNumberField()
+
+    class Meta:
+        model = User
+        fields = ('first_name', 'middle_name', 'surname', 'sex', 'DOB', 'marital', 'next_of_kin', 'phone', 'email', 'address', 'zip_code', 'state_province', 'country')
+
+class UserRegisterForm(forms.ModelForm):
+    """A form for creating new users. Includes all the required
+    fields, plus a repeated password."""
+    password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
+    password2 = forms.CharField(label='Password confirmation', widget=forms.PasswordInput)
+    zip_code = USZipCodeField()
+    state_province = USStateField()
+    SSN = USSocialSecurityNumberField()
+    phone = PhoneNumberField()
+    fax = PhoneNumberField()
+
+
+    class Meta:
+        model = User
+        fields = ('first_name', 'middle_name', 'surname', 'sex', 'DOB', 'marital', 'next_of_kin', 'phone', 'fax', 'email', 'address', 'zip_code', 'state_province', 'SSN', 'country') #'full_name',)
+
+    def clean_password2(self):
+        # Check that the two password entries match
+        password1 = self.cleaned_data.get("password1")
+        password2 = self.cleaned_data.get("password2")
+        if password1 and password2 and password1 != password2:
+            raise forms.ValidationError("Passwords don't match")
+        return password2
+
+    def save(self, commit=True):
+        # Save the provided password in hashed format
+        user = super(UserRegisterForm, self).save(commit=False)
+        user.set_password(self.cleaned_data["password1"])
+        user.is_active = False # send confirmation email via signals
+        user.client = True
+        # obj = EmailActivation.objects.create(user=user)
+        # obj.send_activation_email()
+        if commit:
+            user.save()
+        return user
+
+class StaffDetailChangeForm(forms.ModelForm):
+    phone = PhoneNumberField()
+    fax = PhoneNumberField()
+
+    class Meta:
+        model = User
+        fields = ('first_name', 'middle_name', 'surname', 'sex', 'phone', 'fax', 'email', 'address', 'country', 'client')
+
+class StaffRegisterForm(forms.ModelForm):
+    """A form for creating new users. Includes all the required
+    fields, plus a repeated password."""
+    password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
+    password2 = forms.CharField(label='Password confirmation', widget=forms.PasswordInput)
+    phone = PhoneNumberField()
+    fax = PhoneNumberField()
+
+
+    class Meta:
+        model = User
+        fields = ('first_name', 'middle_name', 'surname', 'sex', 'phone', 'fax', 'email', 'address', 'country')
+
+    def clean_password2(self):
+        # Check that the two password entries match
+        password1 = self.cleaned_data.get("password1")
+        password2 = self.cleaned_data.get("password2")
+        if password1 and password2 and password1 != password2:
+            raise forms.ValidationError("Passwords don't match")
+        return password2
+
+    def save(self, commit=True):
+        # Save the provided password in hashed format
+        user = super(StaffRegisterForm, self).save(commit=False)
+        user.set_password(self.cleaned_data["password1"])
+        user.is_active = False # send confirmation email via signals
+        user.client = True
+        user.staff = True
+        # obj = EmailActivation.objects.create(user=user)
+        # obj.send_activation_email()
+        if commit:
+            user.save()
+        return user
+
+
+
+ADMIN SETUP
+_________________________________
+
+class UserAdmin(BaseUserAdmin):
+    # The forms to add and change user instances
+    form = UserAdminChangeForm
+    add_form = UserAdminCreationForm
+
+    # The fields to be used in displaying the User model.
+    # These override the definitions on the base UserAdmin
+    # that reference specific fields on auth.User.
+    list_display = ('email', 'short_name', 'age', 'admin', 'staff', 'client', 'is_active')
+    list_filter = ('admin', 'staff', 'client', 'is_active')
+    fieldsets = (
+        ('Personal_Info', {'fields': ('first_name', 'middle_name', 'surname', 'sex', 'marital', 'next_of_kin', 'DOB')}),
+       # ('Full name', {'fields': ()}),, 'email', 'password'
+        ('Contact', {'fields': ('phone', 'fax', 'email', 'address', 'zip_code', 'state/province', 'SSN', 'country')}),
+        ('Permissions', {'fields': ('password', 'admin', 'staff', 'client', 'is_active',)}),
+    )
+    # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
+    # overrides get_fieldsets to use this attribute when creating a user.
+    add_fieldsets = (
+        (None, {
+            'classes': ('wide',),
+            'fields': ('email', 'password1', 'password2')}
+        ),
+    )
+    search_fields = ('email', 'full_name',)
+    ordering = ('email', 'first_name', 'surname', 'middle_name')
+    filter_horizontal = ()
+
+
+admin.site.register(User, UserAdmin)
+
+
+DEFINING AGE
+_________________________________
+
+    @property
+    def age(DOB):
+        if DOB > date.today().replace(year = DOB.year):
+            return date.today().year - DOB.year - 1
+        else:
+            return date.today().year - DOB.year
